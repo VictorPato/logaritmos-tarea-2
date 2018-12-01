@@ -1,4 +1,4 @@
-public interface PriorityQueue {
+public interface IPriorityQueue {
     void add(int node, int priority);
 
     int extractMin();
