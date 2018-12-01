@@ -1,4 +1,30 @@
-public class HeapQueue {
+public class HeapQueue implements IPriorityQueue {
+
+    private Heap Heap;
+
+    /**
+     * Constructor
+     * @param maxsize Maximum size of the Queue
+     */
+    HeapQueue(int maxsize) {
+        Heap = new Heap(maxsize);
+    }
+
+    @Override
+    public void add(int node, int priority) {
+        Node n = new Node(node, priority);
+        Heap.insert(n);
+    }
+
+    @Override
+    public int extractMin() {
+        return Heap.extractMin().getKey();
+    }
+
+    @Override
+    public void decreaseKey(int node, int newPriority) {
+
+    }
 }
 
 /**
@@ -15,7 +41,7 @@ class Heap {
      * Constructor
      * @param maxsize Maximum size of the heap
      */
-    public Heap(int maxsize) {
+    Heap(int maxsize) {
         this.size = 0;
         Heap = new Node[maxsize + 1];
         Heap[0] = new Node(-1, Integer.MIN_VALUE);
@@ -90,7 +116,7 @@ class Heap {
      * Inserts a new element
      * @param element Node to be inserted
      */
-    public void insert(Node element) {
+    void insert(Node element) {
         Heap[++size] = element;
         for (int i = size; (i > 1) && Heap[i].getValue() > Heap[parent(i)].getValue(); i /= 2) {
             swap(i, parent(i));
@@ -101,7 +127,7 @@ class Heap {
      * Extracts the min element and repairs the Heap using heapify
      * @return Min element
      */
-    public Node extractMin() {
+    Node extractMin() {
         Node min = Heap[FRONT];
         Heap[FRONT] = Heap[size--];
         heapify();
@@ -129,7 +155,7 @@ class Node {
     /**
      * Returns key
      */
-    public int getKey() {
+    int getKey() {
         return key;
     }
 
