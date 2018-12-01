@@ -23,7 +23,7 @@ public class HeapQueue implements IPriorityQueue {
 
     @Override
     public void decreaseKey(int node, int newPriority) {
-
+        
     }
 }
 
@@ -132,6 +132,21 @@ class Heap {
         Heap[FRONT] = Heap[size--];
         heapify();
         return min;
+    }
+
+    /**
+     * Search the Heap for the element with Key = key
+     * @param key Key to search
+     * @return The element if found, a Node(-1, -1) otherwise
+     */
+    Node searchByKey(int key) {
+        int i = FRONT;
+        while (i <= size) {
+            if (Heap[i].getKey() == key)
+                return Heap[i];
+            i++;
+        }
+        return new Node(-1, -1);
     }
 }
 
