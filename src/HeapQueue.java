@@ -4,6 +4,7 @@ public class HeapQueue implements IPriorityQueue {
 
     /**
      * Constructor
+     *
      * @param maxsize Maximum size of the Queue
      */
     HeapQueue(int maxsize) {
@@ -41,6 +42,7 @@ class Heap {
 
     /**
      * Constructor
+     *
      * @param maxsize Maximum size of the heap
      */
     Heap(int maxsize) {
@@ -51,6 +53,7 @@ class Heap {
 
     /**
      * Returns the position of the parent of the given pos
+     *
      * @param pos Position whose parent we seek
      * @return Position of the parent
      */
@@ -60,6 +63,7 @@ class Heap {
 
     /**
      * Returns the position of the left child of the given pos
+     *
      * @param pos Position whose left child we seek
      * @return Position of the left child
      */
@@ -69,6 +73,7 @@ class Heap {
 
     /**
      * Returns the position of the right child of the given pos
+     *
      * @param pos Position whose right child we seek
      * @return Position of the right child
      */
@@ -76,8 +81,14 @@ class Heap {
         return (2 * pos) + 1;
     }
 
+
+    private boolean isLeaf(int pos) {
+        return leftChild(pos) > this.size;
+    }
+
     /**
      * Swaps two elements of the Heap
+     *
      * @param fpos First position
      * @param spos Second position
      */
@@ -90,32 +101,33 @@ class Heap {
     /**
      * Preserves Heap conditions
      */
-    void heapify() {
+    void heapify(){
         // initial position
         int i = FRONT;
 
-        // biggest of the two children
-        int bigChild;
+        // smallest of the two children
+        int smallChild;
 
         // while current position has any child
         while (leftChild(i) <= size) {
-            if (rightChild(i) <= size && Heap[rightChild(i)].getValue() > Heap[leftChild(i)].getValue())
-                bigChild = rightChild(i); // right child is bigger
+            if (rightChild(i) <= size && Heap[rightChild(i)].getValue() < Heap[leftChild(i)].getValue())
+                smallChild = rightChild(i); // right child is smaller
             else
-                bigChild = leftChild(i); // left child is bigger
+                smallChild = leftChild(i); // left child is smaller
 
-            // if current is bigger than both children then break
-            if (Heap[i].getValue() > Heap[bigChild].getValue())
+            // if current is smaller than both children then break
+            if (Heap[i].getValue() < Heap[smallChild].getValue())
                 break;
 
             // swap with big child
-            swap(i, bigChild);
-            i = bigChild;
+            swap(i, smallChild);
+            i = smallChild;
         }
     }
 
     /**
      * Inserts a new element
+     *
      * @param element Node to be inserted
      */
     void insert(Node element) {
@@ -127,6 +139,7 @@ class Heap {
 
     /**
      * Extracts the min element and repairs the Heap using heapify
+     *
      * @return Min element
      */
     Node extractMin() {
@@ -138,6 +151,7 @@ class Heap {
 
     /**
      * Search the Heap for the element with Key = key
+     *
      * @param key Key to search
      * @return The element if found, a Node(-1, -1) otherwise
      */
@@ -161,7 +175,8 @@ class Node {
 
     /**
      * Constructor
-     * @param key Key
+     *
+     * @param key   Key
      * @param value Value
      */
     Node(int key, int value) {
@@ -185,6 +200,7 @@ class Node {
 
     /**
      * Sets value
+     *
      * @param value New value to be set
      */
     public void setValue(int value) {
