@@ -23,7 +23,9 @@ public class HeapQueue implements IPriorityQueue {
 
     @Override
     public void decreaseKey(int node, int newPriority) {
-        
+        Node n = Heap.searchByKey(node);
+        n.setValue(newPriority);
+        Heap.heapify();
     }
 }
 
@@ -88,7 +90,7 @@ class Heap {
     /**
      * Preserves Heap conditions
      */
-    private void heapify() {
+    void heapify() {
         // initial position
         int i = FRONT;
 
