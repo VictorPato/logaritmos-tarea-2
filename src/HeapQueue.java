@@ -12,7 +12,7 @@ public class HeapQueue implements IPriorityQueue {
 
     @Override
     public void add(int node, int priority) {
-        Node n = new Node(node, priority);
+        Node n = new Node(node, priority, -1);
         Heap.insert(n);
     }
 
@@ -44,7 +44,7 @@ class Heap {
     Heap(int maxsize) {
         this.size = 0;
         Heap = new Node[maxsize + 1];
-        Heap[0] = new Node(-1, Integer.MIN_VALUE);
+        Heap[0] = new Node(-1, Integer.MIN_VALUE, 0);
     }
 
     /**
@@ -80,6 +80,8 @@ class Heap {
      * @param spos Second position
      */
     private void swap(int fpos, int spos) {
+        Heap[fpos].setPos(spos);
+        Heap[spos].setPos(fpos);
         Node tmp = Heap[fpos];
         Heap[fpos] = Heap[spos];
         Heap[spos] = tmp;
@@ -117,6 +119,7 @@ class Heap {
      * @param element Node to be inserted
      */
     void insert(Node element) {
+        element.setPos(size+1);
         Heap[++size] = element;
         for (int i = size; (i > 1) && Heap[i].getValue() > Heap[parent(i)].getValue(); i /= 2) {
             swap(i, parent(i));
@@ -136,20 +139,22 @@ class Heap {
 }
 
 /**
- * Class Node, it stores a key and a value
+ * Class Node, it stores a key, a value and a position in the Heap
  */
 class Node {
 
-    private int key, value;
+    private int key, value, pos;
 
     /**
      * Constructor
      * @param key Key
      * @param value Value
+     * @param pos Position
      */
-    Node(int key, int value) {
+    Node(int key, int value, int pos) {
         this.key = key;
         this.value = value;
+        this.pos = pos;
     }
 
     /**
@@ -172,5 +177,20 @@ class Node {
      */
     public void setValue(int value) {
         this.value = value;
+    }
+
+    /**
+     * Returns pos
+     */
+    public int getPos() {
+        return pos;
+    }
+
+    /**
+     * Sets position
+     * @param pos New position
+     */
+    void setPos(int pos) {
+        this.pos = pos;
     }
 }
