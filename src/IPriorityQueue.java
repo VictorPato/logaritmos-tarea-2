@@ -4,4 +4,6 @@ public interface IPriorityQueue {
     int extractMin();
 
     void decreaseKey(int node, int newPriority);
+
+    boolean isEmpty();
 }
