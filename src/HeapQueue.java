@@ -24,9 +24,7 @@ public class HeapQueue implements IPriorityQueue {
 
     @Override
     public void decreaseKey(int node, int newPriority) {
-        Node n = Heap.searchByKey(node);
-        n.setValue(newPriority);
-        Heap.heapify();
+        Heap.decreaseKey(node, newPriority);
     }
 }
 
@@ -37,6 +35,7 @@ class Heap {
 
     private Node[] Heap;
     private int size;
+    private int[] position;
 
     private static final int FRONT = 1;
 
@@ -49,6 +48,7 @@ class Heap {
         this.size = 0;
         Heap = new Node[maxsize + 1];
         Heap[0] = new Node(-1, Integer.MIN_VALUE);
+        position = new int[maxsize + 1];
     }
 
     /**
@@ -81,7 +81,9 @@ class Heap {
         return (2 * pos) + 1;
     }
 
-
+    /**
+     * Returns true if position contains a leaf, false otherwise  
+     */
     private boolean isLeaf(int pos) {
         return leftChild(pos) > this.size;
     }
@@ -93,9 +95,12 @@ class Heap {
      * @param spos Second position
      */
     private void swap(int fpos, int spos) {
-        Node tmp = Heap[fpos];
-        Heap[fpos] = Heap[spos];
-        Heap[spos] = tmp;
+        Node element1 = Heap[fpos];
+        Node element2 = Heap[spos];
+        Heap[fpos] = element2;
+        Heap[spos] = element1;
+        position[element1.getKey] = spos;
+        position[element2.getKey] = fpos;
     }
 
     /**
@@ -119,7 +124,7 @@ class Heap {
             if (Heap[i].getValue() < Heap[smallChild].getValue())
                 break;
 
-            // swap with big child
+            // swap with small child
             swap(i, smallChild);
             i = smallChild;
         }
@@ -132,6 +137,7 @@ class Heap {
      */
     void insert(Node element) {
         Heap[++size] = element;
+        position[element.getKey] = size;
         for (int i = size; (i > 1) && Heap[i].getValue() > Heap[parent(i)].getValue(); i /= 2) {
             swap(i, parent(i));
         }
@@ -150,19 +156,15 @@ class Heap {
     }
 
     /**
-     * Search the Heap for the element with Key = key
+     * Decrease value of key
      *
-     * @param key Key to search
-     * @return The element if found, a Node(-1, -1) otherwise
+     * @param key Key to decrease
+     * @param value New value
      */
-    Node searchByKey(int key) {
-        int i = FRONT;
-        while (i <= size) {
-            if (Heap[i].getKey() == key)
-                return Heap[i];
-            i++;
-        }
-        return new Node(-1, -1);
+    void decreaseKey(int key, int value) {
+        int pos = position[key];
+        Heap[pos].setValue(value);
+        heapify();
     }
 }
 
