@@ -42,21 +42,37 @@ class Tests {
         }
         System.out.println("Dijkstra works fine");
     }
-    static void testBinomialTree(){
-        BinomialTree t1 = new BinomialTree(1,1);
-        BinomialTree t2 = new BinomialTree(2,2);
-        BinomialTree t3 = new BinomialTree(3,3);
+
+    static void testBinomialTree() {
+        BinomialTree t1 = new BinomialTree(1, 1);
+        BinomialTree t2 = new BinomialTree(2, 2);
+        BinomialTree t3 = new BinomialTree(3, 3);
         BinomialTree result = t1.uniteWith(t2);
-        assert(result == t1);
-        assert(t1.next == t2);
+        assert (result == t1);
+        assert (t1.next == t2);
         assert (t2.next == t1);
-        assert(t3.next == t3);
+        assert (t3.next == t3);
         result = t1.uniteWith(t3);
-        assert(result == t1);
-        assert(t1.next == t3);
-        assert(t1.prev == t2);
-        assert(t3.next == t2);
-        assert(t2.prev == t3);
+        assert (result == t1);
+        assert (t1.next == t3);
+        assert (t1.prev == t2);
+        assert (t3.next == t2);
+        assert (t2.prev == t3);
+        t1 = new BinomialTree(1, 1);
+        t2 = new BinomialTree(2, 2);
+        t3 = new BinomialTree(3, 3);
+        BinomialTree ta = new BinomialTree(1, 1);
+        BinomialTree tb = new BinomialTree(1, 1);
+        BinomialTree tc = new BinomialTree(1, 1);
+        t1.uniteWith(t2);
+        t2.uniteWith(t3);
+        ta.uniteWith(tb);
+        tb.uniteWith(tc);
+        t1.uniteWith(ta);
+        assert (t1.next == ta);
+        assert (ta.prev == t1);
+        assert (tc.next == t2);
+        assert (t2.prev == tc);
         System.out.println("Binomial Tree works fine");
     }
 }
