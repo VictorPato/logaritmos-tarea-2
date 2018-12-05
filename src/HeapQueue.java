@@ -28,8 +28,8 @@ public class HeapQueue implements IPriorityQueue {
     }
 
     @Override
-    public void isEmpty() {
-        Heap.isEmpty();
+    public boolean isEmpty() {
+        return Heap.isEmpty();
     }
 }
 
