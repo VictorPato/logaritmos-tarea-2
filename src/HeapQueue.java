@@ -26,6 +26,11 @@ public class HeapQueue implements IPriorityQueue {
     public void decreaseKey(int node, int newPriority) {
         Heap.decreaseKey(node, newPriority);
     }
+
+    @Override
+    public void isEmpty() {
+        Heap.isEmpty();
+    }
 }
 
 /**
@@ -83,9 +88,18 @@ class Heap {
 
     /**
      * Returns true if position contains a leaf, false otherwise  
+     *
+     * @param pos Query position
      */
     private boolean isLeaf(int pos) {
         return leftChild(pos) > this.size;
+    }
+
+    /**
+     * Returns true if Heap is empty
+     */
+    boolean isEmpty() {
+        return size == 0;
     }
 
     /**
