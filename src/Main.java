@@ -1,9 +1,9 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-        Tests.testGraph();
-        Tests.testDijkstraCorrectness();
+        Tests.testBinomialTree();
     }
 }
 
@@ -41,6 +41,23 @@ class Tests {
             assert (last[i] == naiveAns[1][i]);
         }
         System.out.println("Dijkstra works fine");
+    }
+    static void testBinomialTree(){
+        BinomialTree t1 = new BinomialTree(1,1);
+        BinomialTree t2 = new BinomialTree(2,2);
+        BinomialTree t3 = new BinomialTree(3,3);
+        BinomialTree result = t1.uniteWith(t2);
+        assert(result == t1);
+        assert(t1.next == t2);
+        assert (t2.next == t1);
+        assert(t3.next == t3);
+        result = t1.uniteWith(t3);
+        assert(result == t1);
+        assert(t1.next == t3);
+        assert(t1.prev == t2);
+        assert(t3.next == t2);
+        assert(t2.prev == t3);
+        System.out.println("Binomial Tree works fine");
     }
 }
 
