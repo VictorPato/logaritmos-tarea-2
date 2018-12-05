@@ -1,17 +1,18 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class FibonacciHeap implements IPriorityQueue {
 
     BinomialTree min;
 
-    FibonacciHeap(int numberOfNodes) {
+    public FibonacciHeap() {
     }
 
     /**
      * Adds the node to the Heap. If priority is equal or lower, update min.
      *
-     * @param node
-     * @param priority
+     * @param node     Node to add
+     * @param priority Priority of node
      */
     @Override
     public void add(int node, int priority) {
@@ -23,17 +24,48 @@ public class FibonacciHeap implements IPriorityQueue {
         }
     }
 
+    /**
+     * Extracts the node with lowest priority. Afterwards it turns the Fibonacci Heap into a Binomial Heap to extract
+     * the new minimum.
+     *
+     * @return The node with lowest priority.
+     */
     @Override
     public int extractMin() {
-        BinomialTree minNext = min.next;
-        return 0;
+        if (min == null) {
+            throw new NoSuchElementException();
+        }
+        int ans = min.node;
+        if (min.child != null) {
+            min.child.parent = null;
+            BinomialTree minChild = min.child.next;
+            while (minChild != min.child) {
+                minChild.parent = null;
+                minChild = minChild.next;
+            }
+        }
+        BinomialTree nextRootTree = min.remove();
+        if (nextRootTree == null) {
+            min = min.child;
+        } else {
+            min = nextRootTree.uniteWith(min.child);
+        }
+        makeBinomialHeap();
+        return ans;
     }
 
+    // TODO
     @Override
     public void decreaseKey(int node, int newPriority) {
 
     }
 
+    @Override
+    public boolean isEmpty() {
+        return min == null;
+    }
+
+    // TODO
     private BinomialTree makeBinomialHeap() {
         return null;
     }
@@ -68,10 +100,30 @@ class BinomialTree {
      * @return The smaller node
      */
     public BinomialTree uniteWith(BinomialTree otherTree) {
+        if (otherTree == null) {
+            return this;
+        }
         otherTree.prev.next = next;
         next.prev = otherTree.prev;
         next = otherTree;
         otherTree.prev = this;
         return priority <= otherTree.priority ? this : otherTree;
+    }
+
+    /**
+     * Removes the node from its lists
+     *
+     * @return The next element of the list, or null if it was the last element
+     */
+    public BinomialTree remove() {
+        if (next == this) {
+            return null;
+        }
+        prev.next = next;
+        next.prev = prev;
+        BinomialTree nextNode = next;
+        next = this;
+        prev = this;
+        return nextNode;
     }
 }
