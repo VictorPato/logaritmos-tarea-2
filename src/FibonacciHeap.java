@@ -19,7 +19,7 @@ public class FibonacciHeap implements IPriorityQueue {
      * @param priority Priority of node
      */
     @Override
-    public void add(int node, int priority) {
+    public void add(int node, double priority) {
         BinomialTree newNode = new BinomialTree(node, priority);
         pointerToNode.put(node, newNode);
         if (min == null) {
@@ -36,7 +36,7 @@ public class FibonacciHeap implements IPriorityQueue {
      * @return The node with lowest priority.
      */
     @Override
-    public int extractMin() {
+    public double extractMin() {
         if (min == null) {
             throw new NoSuchElementException();
         }
@@ -66,7 +66,7 @@ public class FibonacciHeap implements IPriorityQueue {
      * @param newPriority New priority.
      */
     @Override
-    public void decreaseKey(int node, int newPriority) {
+    public void decreaseKey(int node, double newPriority) {
         BinomialTree treeToDecrease = pointerToNode.get(node);
         treeToDecrease.priority = newPriority;
         BinomialTree parentTree = treeToDecrease.parent;
@@ -80,6 +80,10 @@ public class FibonacciHeap implements IPriorityQueue {
 
     }
 
+    /**
+     * If the node is marked, cut it and recursive cut the parent. If not, mark it.
+     * @param node The node to mark/cut.
+     */
     public void recursiveCut(BinomialTree node){
         if(node.parent == null){
             return;
@@ -187,7 +191,7 @@ public class FibonacciHeap implements IPriorityQueue {
  */
 class BinomialTree {
     int node;
-    int priority;
+    double priority;
     int k;
     boolean isMarked;
     BinomialTree parent;
@@ -195,7 +199,7 @@ class BinomialTree {
     BinomialTree next;
     BinomialTree child;
 
-    public BinomialTree(int node, int priority) {
+    public BinomialTree(int node, double priority) {
         this.node = node;
         this.priority = priority;
         this.k = 0;
