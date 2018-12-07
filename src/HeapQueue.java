@@ -113,14 +113,14 @@ class Heap {
         Node element2 = Heap[spos];
         Heap[fpos] = element2;
         Heap[spos] = element1;
-        position[element1.getKey] = spos;
-        position[element2.getKey] = fpos;
+        position[element1.getKey()] = spos;
+        position[element2.getKey()] = fpos;
     }
 
     /**
      * Preserves Heap conditions
      */
-    void heapify(){
+    private void heapify(){
         // initial position
         int i = FRONT;
 
@@ -151,7 +151,7 @@ class Heap {
      */
     void insert(Node element) {
         Heap[++size] = element;
-        position[element.getKey] = size;
+        position[element.getKey()] = size;
         for (int i = size; (i > 1) && Heap[i].getValue() > Heap[parent(i)].getValue(); i /= 2) {
             swap(i, parent(i));
         }
@@ -219,7 +219,7 @@ class Node {
      *
      * @param value New value to be set
      */
-    public void setValue(int value) {
+    void setValue(int value) {
         this.value = value;
     }
 }
