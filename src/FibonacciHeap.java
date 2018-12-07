@@ -36,7 +36,7 @@ public class FibonacciHeap implements IPriorityQueue {
      * @return The node with lowest priority.
      */
     @Override
-    public double extractMin() {
+    public int extractMin() {
         if (min == null) {
             throw new NoSuchElementException();
         }
