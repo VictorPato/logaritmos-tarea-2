@@ -58,13 +58,13 @@ class Tests {
         g.addDoubleEdge(2, 5, 2);
         g.addDoubleEdge(3, 4, 6);
         g.addDoubleEdge(4, 5, 9);
-        int[] ans = {0, 7, 9, 20, 20, 11};
+        double[] ans = {0, 7, 9, 20, 20, 11};
         int[] last = {-1, 0, 0, 2, 5, 2};
 
-        int[][] naiveAns = dijkstra.applyAlgorithm(g, 0);
+        Ans answer = dijkstra.applyAlgorithm(g, 0);
         for (int i = 0; i < 6; i++) {
-            assert (ans[i] == naiveAns[0][i]);
-            assert (last[i] == naiveAns[1][i]);
+            assert (ans[i] == answer.getDist()[i]);
+            assert (last[i] == answer.getPrev()[i]);
         }
         System.out.println(type + "Dijkstra works fine");
     }
