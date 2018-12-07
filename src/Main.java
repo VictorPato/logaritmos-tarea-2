@@ -1,3 +1,7 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
         Tests.runTests();
@@ -199,5 +203,34 @@ class Tests {
         System.out.println("Decrease Key works fine");
     }
 
+    static Graph createGraph(int e_factor, long randomSeed) {
+        int n = 100000;
+        int e = e_factor * n;
+
+        Random rnd = new Random(randomSeed);
+
+        Graph g = new Graph(n);
+        double weight;
+
+        // ensure connectivity
+        for (int i = 0; i < n - 1; i++) {
+            weight = rnd.nextDouble(); // weight is in the interval [0, 1)
+            weight = weight == 0 ? 1 : weight; // now weight is in the interval (0, 1]
+            g.addEdge(i, new Edge(i + 1, weight));
+        }
+
+        int node1, node2;
+
+        // add e - n + 1 random edges
+        for (int i = 0; i <= e - n; i++) {
+            node1 = rnd.nextInt(n);
+            node2 = rnd.nextInt(n);
+            weight = rnd.nextDouble(); // weight is in the interval [0, 1)
+            weight = weight == 0 ? 1 : weight; // now weight is in the interval (0, 1]
+            g.addEdge(node1, new Edge(node2, weight));
+        }
+
+        return g;
+    }
 }
 
