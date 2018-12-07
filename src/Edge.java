@@ -3,9 +3,9 @@
  */
 public class Edge {
     private int node;
-    private int weight;
+    private double weight;
 
-    public Edge(int node, int weight) {
+    public Edge(int node, double weight) {
         this.node = node;
         this.weight = weight;
     }
@@ -14,7 +14,7 @@ public class Edge {
         return node;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 }

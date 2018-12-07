@@ -3,6 +3,12 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
+
+    }
+}
+
+class Tests {
+    static void runTests(){
         Tests.testGraph();
         Tests.testBinomialTree();
         Tests.testQueue("Heap");
@@ -13,9 +19,7 @@ public class Main {
         Tests.testDijkstraCorrectness("Heap");
         Tests.testDijkstraCorrectness("Fibonacci");
     }
-}
 
-class Tests {
     static void testGraph() {
         Graph g = new Graph(5);
         g.addDoubleEdge(0, 1, 5);

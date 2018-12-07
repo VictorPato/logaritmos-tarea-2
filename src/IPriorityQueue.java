@@ -1,9 +1,9 @@
 public interface IPriorityQueue {
-    void add(int node, int priority);
+    void add(int node, double priority);
 
     int extractMin();
 
-    void decreaseKey(int node, int newPriority);
+    void decreaseKey(int node, double newPriority);
 
     boolean isEmpty();
 }
