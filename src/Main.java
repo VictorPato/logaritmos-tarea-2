@@ -3,7 +3,11 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
+        Tests.testGraph();
+        Tests.testDijkstraCorrectness();
         Tests.testBinomialTree();
+        Tests.testFibonacciHeap();
+        Tests.testFibonacciHeapDecreaseKey();
     }
 }
 
@@ -47,12 +51,12 @@ class Tests {
         BinomialTree t1 = new BinomialTree(1, 1);
         BinomialTree t2 = new BinomialTree(2, 2);
         BinomialTree t3 = new BinomialTree(3, 3);
-        BinomialTree result = t1.uniteWith(t2);
+        BinomialTree result = t1.uniteListWith(t2);
         assert (result == t1);
         assert (t1.next == t2);
         assert (t2.next == t1);
         assert (t3.next == t3);
-        result = t1.uniteWith(t3);
+        result = t1.uniteListWith(t3);
         assert (result == t1);
         assert (t1.next == t3);
         assert (t1.prev == t2);
@@ -64,16 +68,88 @@ class Tests {
         BinomialTree ta = new BinomialTree(1, 1);
         BinomialTree tb = new BinomialTree(1, 1);
         BinomialTree tc = new BinomialTree(1, 1);
-        t1.uniteWith(t2);
-        t2.uniteWith(t3);
-        ta.uniteWith(tb);
-        tb.uniteWith(tc);
-        t1.uniteWith(ta);
+        t1.uniteListWith(t2);
+        t2.uniteListWith(t3);
+        ta.uniteListWith(tb);
+        tb.uniteListWith(tc);
+        t1.uniteListWith(ta);
         assert (t1.next == ta);
         assert (ta.prev == t1);
         assert (tc.next == t2);
         assert (t2.prev == tc);
         System.out.println("Binomial Tree works fine");
+    }
+
+    static void testFibonacciHeap() {
+        FibonacciHeap FH = new FibonacciHeap();
+        FH.add(0, 1);
+        FH.add(1, 5);
+        FH.add(2, 0);
+        int ans = FH.extractMin();
+        assert (ans == 2);
+        ans = FH.extractMin();
+        assert (ans == 0);
+        ans = FH.extractMin();
+        assert (ans == 1);
+        FH.add(3, 10);
+        FH.add(4, 9);
+        FH.add(5, 11);
+        FH.add(6, 8);
+        FH.add(7, 7);
+        ans = FH.extractMin();
+        assert (ans == 7);
+        ans = FH.extractMin();
+        assert (ans == 6);
+        ans = FH.extractMin();
+        assert (ans == 4);
+        FH.add(8, 0);
+        FH.add(9, 100);
+        ans = FH.extractMin();
+        assert (ans == 8);
+        ans = FH.extractMin();
+        assert (ans == 3);
+        ans = FH.extractMin();
+        assert (ans == 5);
+        ans = FH.extractMin();
+        assert (ans == 9);
+        System.out.println("Fibonacci Heap works fine");
+    }
+
+    static void testFibonacciHeapDecreaseKey() {
+        FibonacciHeap FH = new FibonacciHeap();
+        FH.add(0, 1);
+        FH.add(1, 5);
+        FH.add(2, 0);
+        FH.add(3, 7);
+        FH.decreaseKey(3, 3);
+        int ans = FH.extractMin();
+        assert (ans == 2);
+        ans = FH.extractMin();
+        assert (ans == 0);
+        ans = FH.extractMin();
+        assert (ans == 3);
+        ans = FH.extractMin();
+        assert (ans == 1);
+        for (int i = 1; i <= 10; i++) {
+            FH.add(i, 2 * i);
+        }
+        ans = FH.extractMin();
+        assert (ans == 1);
+        FH.decreaseKey(9,0);
+        FH.decreaseKey(8,1);
+        FH.decreaseKey(7,2);
+        FH.decreaseKey(6,3);
+        ans = FH.extractMin();
+        assert (ans == 9);
+        ans = FH.extractMin();
+        assert (ans == 8);
+        ans = FH.extractMin();
+        assert (ans == 7);
+        ans = FH.extractMin();
+        assert (ans == 6);
+        ans = FH.extractMin();
+        assert (ans == 2);
+        System.out.println("Decrease Key works fine");
     }
 }
 

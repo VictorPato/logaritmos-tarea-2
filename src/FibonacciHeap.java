@@ -1,11 +1,15 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public class FibonacciHeap implements IPriorityQueue {
 
     BinomialTree min;
+    HashMap<Integer, BinomialTree> pointerToNode;
 
     public FibonacciHeap() {
+        pointerToNode = new HashMap<Integer, BinomialTree>();
     }
 
     /**
@@ -17,10 +21,11 @@ public class FibonacciHeap implements IPriorityQueue {
     @Override
     public void add(int node, int priority) {
         BinomialTree newNode = new BinomialTree(node, priority);
+        pointerToNode.put(node, newNode);
         if (min == null) {
             min = newNode;
         } else {
-            min = min.uniteWith(newNode);
+            min = min.uniteListWith(newNode);
         }
     }
 
@@ -48,26 +53,131 @@ public class FibonacciHeap implements IPriorityQueue {
         if (nextRootTree == null) {
             min = min.child;
         } else {
-            min = nextRootTree.uniteWith(min.child);
+            min = uniteLists(nextRootTree, min.child);
         }
         makeBinomialHeap();
+        pointerToNode.remove(ans);
         return ans;
     }
 
-    // TODO
+    /**
+     * Decreases the priority of node received to the new priority. Causes a recursive cut if necessary.
+     * @param node Node to update.
+     * @param newPriority New priority.
+     */
     @Override
     public void decreaseKey(int node, int newPriority) {
+        BinomialTree treeToDecrease = pointerToNode.get(node);
+        treeToDecrease.priority = newPriority;
+        BinomialTree parentTree = treeToDecrease.parent;
+        if(treeToDecrease.parent != null && parentTree.priority > newPriority){
+            cut(treeToDecrease);
+            recursiveCut(parentTree);
+        }
+        if(newPriority < min.priority){
+            min = treeToDecrease;
+        }
 
     }
 
+    public void recursiveCut(BinomialTree node){
+        if(node.parent == null){
+            return;
+        }
+        if(node.isMarked){
+            BinomialTree parent = node.parent;
+            cut(node);
+            recursiveCut(parent);
+            node.isMarked = false;
+        } else {
+            node.isMarked = true;
+        }
+    }
+
+    /**
+     * Cuts a BT, adding it as sibling to the root. Decreases parent's degree.
+     * @param node The node to cut.
+     */
+    public void cut(BinomialTree node){
+        node.isMarked = false;
+        BinomialTree nextNode = node.remove();
+        if(node.parent.child == node){
+            node.parent.child = nextNode;
+        }
+        node.parent.k--;
+        node.parent = null;
+        uniteLists(node,min);
+    }
+
+    /**
+     * Check if heap has elements left.
+     * @return True if heap has no elements left. False otherwise.
+     */
     @Override
     public boolean isEmpty() {
         return min == null;
     }
 
-    // TODO
-    private BinomialTree makeBinomialHeap() {
-        return null;
+
+    /**
+     * Turns the Fibonacci Heap into a Binomial Heap temporally to extract the minimum priority node
+     */
+    private void makeBinomialHeap() {
+        if (min == null) {
+            return;
+        }
+        ArrayList<BinomialTree> currentTrees = new ArrayList<>(Collections.nCopies(min.k + 2, null));
+        currentTrees.set(min.k, min);
+        BinomialTree rootTree = min.next;
+        min.next = min;
+        min.prev = min;
+        // for each root tree, we combine the ones with same degree until all of them have different degrees
+        while (min != rootTree) {
+            BinomialTree nextRootTree = rootTree.next;
+            rootTree.next = rootTree;
+            rootTree.prev = rootTree;
+            while (currentTrees.size() < rootTree.k + 2) {
+                currentTrees.add(null);
+            }
+            while (currentTrees.get(rootTree.k) != null) {
+                BinomialTree otherRootTree = currentTrees.get(rootTree.k);
+                currentTrees.set(rootTree.k, null);
+                rootTree = otherRootTree.combine(rootTree);
+            }
+            while (currentTrees.size() < rootTree.k + 2) {
+                currentTrees.add(null);
+            }
+            currentTrees.set(rootTree.k, rootTree);
+            rootTree = nextRootTree;
+        }
+        // we take all of the new root trees and link them together
+        min = null;
+        for (BinomialTree tree : currentTrees) {
+            if (tree == null) {
+                continue;
+            }
+            min = uniteLists(min, tree);
+        }
+    }
+
+    /**
+     * Same as UniteListsWith from BinomialTree, but takes care of null values
+     *
+     * @param t1 First BT
+     * @param t2 Second BT
+     * @return The BT with lower priority
+     */
+    static BinomialTree uniteLists(BinomialTree t1, BinomialTree t2) {
+        if (t1 == null && t2 == null) {
+            return null;
+        }
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
+        return t1.uniteListWith(t2);
     }
 }
 
@@ -99,7 +209,7 @@ class BinomialTree {
      * @param otherTree The other node
      * @return The smaller node
      */
-    public BinomialTree uniteWith(BinomialTree otherTree) {
+    public BinomialTree uniteListWith(BinomialTree otherTree) {
         if (otherTree == null) {
             return this;
         }
@@ -125,5 +235,28 @@ class BinomialTree {
         next = this;
         prev = this;
         return nextNode;
+    }
+
+    /**
+     * Takes 2 trees and makes the one with the highest priority the child of the other one
+     * It's up to the user to make sure that both trees have same k and correct siblings (none) before using this function
+     *
+     * @param otherTree The other tree
+     * @return The tree with lower priority
+     */
+    public BinomialTree combine(BinomialTree otherTree) {
+        BinomialTree lowerPriority;
+        BinomialTree higherPriority;
+        if (priority <= otherTree.priority) {
+            lowerPriority = this;
+            higherPriority = otherTree;
+        } else {
+            lowerPriority = otherTree;
+            higherPriority = this;
+        }
+        lowerPriority.child = higherPriority.uniteListWith(lowerPriority.child);
+        higherPriority.parent = lowerPriority;
+        lowerPriority.k++;
+        return lowerPriority;
     }
 }
