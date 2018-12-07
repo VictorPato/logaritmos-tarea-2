@@ -1,18 +1,18 @@
 public class NaiveDijkstra implements IDijkstra {
     @Override
-    public int[][] applyAlgorithm(Graph g, int origin) {
+    public Ans applyAlgorithm(Graph g, int origin) {
         int V = g.getSize();
         // all distances are not final, and initialized false (by default)
         boolean[] finalDistance = new boolean[V];
         int[] prev = new int[V];
-        int[] dist = new int[V];
+        double[] dist = new double[V];
         for (int i = 0; i < V; i++) {
-            dist[i] = Integer.MAX_VALUE;
+            dist[i] = Double.MAX_VALUE;
             prev[i] = -1;
         }
         dist[origin] = 0;
         for (int i = 0; i < V; i++) {
-            int minDist = Integer.MAX_VALUE;
+            double minDist = Double.MAX_VALUE;
             int minNodo = -1;
             for (int j = 0; j < V; j++) {
                 if (!(finalDistance[j]) && (dist[j] < minDist)) {
@@ -31,6 +31,6 @@ public class NaiveDijkstra implements IDijkstra {
                 }
             }
         }
-        return new int[][]{dist, prev};
+        return new Ans(dist, prev);
     }
 }
