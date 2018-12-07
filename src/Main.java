@@ -6,8 +6,10 @@ public class Main {
         Tests.testGraph();
         Tests.testDijkstraCorrectness();
         Tests.testBinomialTree();
-        Tests.testFibonacciHeap();
-        Tests.testFibonacciHeapDecreaseKey();
+        Tests.testQueue("Heap");
+        Tests.testDecreaseKey("Heap");
+        Tests.testQueue("Fibonacci");
+        Tests.testDecreaseKey("Fibonacci");
     }
 }
 
@@ -80,76 +82,93 @@ class Tests {
         System.out.println("Binomial Tree works fine");
     }
 
-    static void testFibonacciHeap() {
-        FibonacciHeap FH = new FibonacciHeap();
-        FH.add(0, 1);
-        FH.add(1, 5);
-        FH.add(2, 0);
-        int ans = FH.extractMin();
+    static void testQueue(String type) {
+        IPriorityQueue Q;
+        if (type.equals("Heap"))
+            Q = new HeapQueue(100);
+        else if (type.equals("Fibonacci"))
+            Q = new FibonacciHeap();
+        else {
+            System.out.println("Please provide a valid Queue type");
+            return;
+        }
+        Q.add(0, 1);
+        Q.add(1, 5);
+        Q.add(2, 0);
+        int ans = Q.extractMin();
         assert (ans == 2);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 0);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 1);
-        FH.add(3, 10);
-        FH.add(4, 9);
-        FH.add(5, 11);
-        FH.add(6, 8);
-        FH.add(7, 7);
-        ans = FH.extractMin();
+        Q.add(3, 10);
+        Q.add(4, 9);
+        Q.add(5, 11);
+        Q.add(6, 8);
+        Q.add(7, 7);
+        ans = Q.extractMin();
         assert (ans == 7);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 6);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 4);
-        FH.add(8, 0);
-        FH.add(9, 100);
-        ans = FH.extractMin();
+        Q.add(8, 0);
+        Q.add(9, 100);
+        ans = Q.extractMin();
         assert (ans == 8);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 3);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 5);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 9);
-        System.out.println("Fibonacci Heap works fine");
+        System.out.println(type + " Queue works fine");
     }
 
-    static void testFibonacciHeapDecreaseKey() {
-        FibonacciHeap FH = new FibonacciHeap();
-        FH.add(0, 1);
-        FH.add(1, 5);
-        FH.add(2, 0);
-        FH.add(3, 7);
-        FH.decreaseKey(3, 3);
-        int ans = FH.extractMin();
+    static void testDecreaseKey(String type) {
+        IPriorityQueue Q;
+        if (type.equals("Heap"))
+            Q = new HeapQueue(100);
+        else if (type.equals("Fibonacci"))
+            Q = new FibonacciHeap();
+        else {
+            System.out.println("Please provide a valid Queue type");
+            return;
+        }
+        Q.add(0, 1);
+        Q.add(1, 5);
+        Q.add(2, 0);
+        Q.add(3, 7);
+        Q.decreaseKey(3, 3);
+        int ans = Q.extractMin();
         assert (ans == 2);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 0);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 3);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 1);
         for (int i = 1; i <= 10; i++) {
-            FH.add(i, 2 * i);
+            Q.add(i, 2 * i);
         }
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 1);
-        FH.decreaseKey(9,0);
-        FH.decreaseKey(8,1);
-        FH.decreaseKey(7,2);
-        FH.decreaseKey(6,3);
-        ans = FH.extractMin();
+        Q.decreaseKey(9,0);
+        Q.decreaseKey(8,1);
+        Q.decreaseKey(7,2);
+        Q.decreaseKey(6,3);
+        ans = Q.extractMin();
         assert (ans == 9);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 8);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 7);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 6);
-        ans = FH.extractMin();
+        ans = Q.extractMin();
         assert (ans == 2);
         System.out.println("Decrease Key works fine");
     }
+
 }
 
