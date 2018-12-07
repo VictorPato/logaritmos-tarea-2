@@ -8,7 +8,7 @@ public class Main {
 }
 
 class Tests {
-    static void runTests(){
+    static void runTests() {
         Tests.testGraph();
         Tests.testBinomialTree();
         Tests.testQueue("Heap");
@@ -173,10 +173,10 @@ class Tests {
         }
         ans = Q.extractMin();
         assert (ans == 1);
-        Q.decreaseKey(9,0);
-        Q.decreaseKey(8,1);
-        Q.decreaseKey(7,2);
-        Q.decreaseKey(6,3);
+        Q.decreaseKey(9, 0);
+        Q.decreaseKey(8, 1);
+        Q.decreaseKey(7, 2);
+        Q.decreaseKey(6, 3);
         ans = Q.extractMin();
         assert (ans == 9);
         ans = Q.extractMin();

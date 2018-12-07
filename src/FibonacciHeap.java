@@ -62,7 +62,8 @@ public class FibonacciHeap implements IPriorityQueue {
 
     /**
      * Decreases the priority of node received to the new priority. Causes a recursive cut if necessary.
-     * @param node Node to update.
+     *
+     * @param node        Node to update.
      * @param newPriority New priority.
      */
     @Override
@@ -70,11 +71,11 @@ public class FibonacciHeap implements IPriorityQueue {
         BinomialTree treeToDecrease = pointerToNode.get(node);
         treeToDecrease.priority = newPriority;
         BinomialTree parentTree = treeToDecrease.parent;
-        if(treeToDecrease.parent != null && parentTree.priority > newPriority){
+        if (treeToDecrease.parent != null && parentTree.priority > newPriority) {
             cut(treeToDecrease);
             recursiveCut(parentTree);
         }
-        if(newPriority < min.priority){
+        if (newPriority < min.priority) {
             min = treeToDecrease;
         }
 
@@ -82,13 +83,14 @@ public class FibonacciHeap implements IPriorityQueue {
 
     /**
      * If the node is marked, cut it and recursive cut the parent. If not, mark it.
+     *
      * @param node The node to mark/cut.
      */
-    public void recursiveCut(BinomialTree node){
-        if(node.parent == null){
+    public void recursiveCut(BinomialTree node) {
+        if (node.parent == null) {
             return;
         }
-        if(node.isMarked){
+        if (node.isMarked) {
             BinomialTree parent = node.parent;
             cut(node);
             recursiveCut(parent);
@@ -100,21 +102,23 @@ public class FibonacciHeap implements IPriorityQueue {
 
     /**
      * Cuts a BT, adding it as sibling to the root. Decreases parent's degree.
+     *
      * @param node The node to cut.
      */
-    public void cut(BinomialTree node){
+    public void cut(BinomialTree node) {
         node.isMarked = false;
         BinomialTree nextNode = node.remove();
-        if(node.parent.child == node){
+        if (node.parent.child == node) {
             node.parent.child = nextNode;
         }
         node.parent.k--;
         node.parent = null;
-        uniteLists(node,min);
+        uniteLists(node, min);
     }
 
     /**
      * Check if heap has elements left.
+     *
      * @return True if heap has no elements left. False otherwise.
      */
     @Override

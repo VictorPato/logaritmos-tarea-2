@@ -15,22 +15,22 @@ public class NaiveDijkstra implements IDijkstra {
             int minDist = Integer.MAX_VALUE;
             int minNodo = -1;
             for (int j = 0; j < V; j++) {
-                if(!(finalDistance[j]) && (dist[j]<minDist)){
-                    minDist=dist[j];
+                if (!(finalDistance[j]) && (dist[j] < minDist)) {
+                    minDist = dist[j];
                     minNodo = j;
                 }
             }
             int u = minNodo;
             finalDistance[u] = true;
-            for(Edge e : g.getNeighbours(u)){
+            for (Edge e : g.getNeighbours(u)) {
                 int v = e.getNode();
-                int w = e.getWeight();
-                if(dist[v] > dist[u] + w){
+                double w = e.getWeight();
+                if (dist[v] > dist[u] + w) {
                     dist[v] = dist[u] + w;
                     prev[v] = u;
                 }
             }
         }
-        return new int[][]{dist,prev};
+        return new int[][]{dist, prev};
     }
 }
