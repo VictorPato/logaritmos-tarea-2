@@ -1,7 +1,7 @@
 public interface IPriorityQueue {
     void add(int node, double priority);
 
-    double extractMin();
+    int extractMin();
 
     void decreaseKey(int node, double newPriority);
 
