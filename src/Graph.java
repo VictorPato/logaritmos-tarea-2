@@ -23,9 +23,9 @@ public class Graph {
         E.get(node).add(e);
     }
 
-    public void addDoubleEdge(int node1, int node2, double weight){
-        E.get(node1).add(new Edge(node2,weight));
-        E.get(node2).add(new Edge(node1,weight));
+    public void addDoubleEdge(int node1, int node2, double weight) {
+        E.get(node1).add(new Edge(node2, weight));
+        E.get(node2).add(new Edge(node1, weight));
     }
 
     public ArrayList<Edge> getNeighbours(int node) {

@@ -11,7 +11,7 @@ public interface IDijkstra {
 class Ans {
 
     private double[] dist;
-    private int [] prev;
+    private int[] prev;
 
     Ans(double[] dist, int[] prev) {
         this.dist = dist;

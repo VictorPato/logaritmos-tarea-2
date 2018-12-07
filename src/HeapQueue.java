@@ -12,7 +12,7 @@ public class HeapQueue implements IPriorityQueue {
     }
 
     @Override
-    public void add(int node, int priority) {
+    public void add(int node, double priority) {
         Node n = new Node(node, priority);
         Heap.insert(n);
     }
@@ -23,7 +23,7 @@ public class HeapQueue implements IPriorityQueue {
     }
 
     @Override
-    public void decreaseKey(int node, int newPriority) {
+    public void decreaseKey(int node, double newPriority) {
         Heap.decreaseKey(node, newPriority);
     }
 
@@ -87,15 +87,6 @@ class Heap {
     }
 
     /**
-     * Returns true if position contains a leaf, false otherwise  
-     *
-     * @param pos Query position
-     */
-    private boolean isLeaf(int pos) {
-        return leftChild(pos) > this.size;
-    }
-
-    /**
      * Returns true if Heap is empty
      */
     boolean isEmpty() {
@@ -120,7 +111,7 @@ class Heap {
     /**
      * Preserves Heap conditions
      */
-    private void heapify(){
+    private void heapify() {
         // initial position
         int i = FRONT;
 
@@ -172,10 +163,10 @@ class Heap {
     /**
      * Decrease value of key
      *
-     * @param key Key to decrease
+     * @param key   Key to decrease
      * @param value New value
      */
-    void decreaseKey(int key, int value) {
+    void decreaseKey(int key, double value) {
         int pos = position[key];
         Heap[pos].setValue(value);
         heapify();
@@ -187,7 +178,8 @@ class Heap {
  */
 class Node {
 
-    private int key, value;
+    private int key;
+    private double value;
 
     /**
      * Constructor
@@ -195,7 +187,7 @@ class Node {
      * @param key   Key
      * @param value Value
      */
-    Node(int key, int value) {
+    Node(int key, double value) {
         this.key = key;
         this.value = value;
     }
@@ -210,7 +202,7 @@ class Node {
     /**
      * Returns value
      */
-    int getValue() {
+    double getValue() {
         return value;
     }
 
@@ -219,7 +211,7 @@ class Node {
      *
      * @param value New value to be set
      */
-    void setValue(int value) {
+    void setValue(double value) {
         this.value = value;
     }
 }

@@ -3,12 +3,12 @@ import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-
+        Tests.runTests();
     }
 }
 
 class Tests {
-    static void runTests(){
+    static void runTests() {
         Tests.testGraph();
         Tests.testBinomialTree();
         Tests.testQueue("Heap");
@@ -58,13 +58,13 @@ class Tests {
         g.addDoubleEdge(2, 5, 2);
         g.addDoubleEdge(3, 4, 6);
         g.addDoubleEdge(4, 5, 9);
-        int[] ans = {0, 7, 9, 20, 20, 11};
+        double[] ans = {0, 7, 9, 20, 20, 11};
         int[] last = {-1, 0, 0, 2, 5, 2};
 
-        int[][] naiveAns = dijkstra.applyAlgorithm(g, 0);
+        Ans answer = dijkstra.applyAlgorithm(g, 0);
         for (int i = 0; i < 6; i++) {
-            assert (ans[i] == naiveAns[0][i]);
-            assert (last[i] == naiveAns[1][i]);
+            assert (ans[i] == answer.getDist()[i]);
+            assert (last[i] == answer.getPrev()[i]);
         }
         System.out.println(type + "Dijkstra works fine");
     }
@@ -173,10 +173,10 @@ class Tests {
         }
         ans = Q.extractMin();
         assert (ans == 1);
-        Q.decreaseKey(9,0);
-        Q.decreaseKey(8,1);
-        Q.decreaseKey(7,2);
-        Q.decreaseKey(6,3);
+        Q.decreaseKey(9, 0);
+        Q.decreaseKey(8, 1);
+        Q.decreaseKey(7, 2);
+        Q.decreaseKey(6, 3);
         ans = Q.extractMin();
         assert (ans == 9);
         ans = Q.extractMin();
