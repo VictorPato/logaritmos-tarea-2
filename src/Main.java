@@ -4,12 +4,14 @@ import java.util.Collections;
 public class Main {
     public static void main(String[] args) {
         Tests.testGraph();
-        Tests.testDijkstraCorrectness();
         Tests.testBinomialTree();
         Tests.testQueue("Heap");
         Tests.testDecreaseKey("Heap");
         Tests.testQueue("Fibonacci");
         Tests.testDecreaseKey("Fibonacci");
+        Tests.testDijkstraCorrectness("Naive");
+        Tests.testDijkstraCorrectness("Heap");
+        Tests.testDijkstraCorrectness("Fibonacci");
     }
 }
 
@@ -24,7 +26,22 @@ class Tests {
         System.out.println("Graph works fine");
     }
 
-    static void testDijkstraCorrectness() {
+    static void testDijkstraCorrectness(String type) {
+        IDijkstra dijkstra;
+        switch (type) {
+            case "Naive":
+                dijkstra = new NaiveDijkstra();
+                break;
+            case "Heap":
+                dijkstra = new PriorityQueueDijkstra(new HeapQueue(100000));
+                break;
+            case "Fibonacci":
+                dijkstra = new PriorityQueueDijkstra(new FibonacciHeap());
+                break;
+            default:
+                System.out.println("Please provide a valid type");
+                return;
+        }
         Graph g = new Graph(6);
         // graph from the wikipedia page for dijkstras algorithm
         // https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
@@ -40,13 +57,12 @@ class Tests {
         int[] ans = {0, 7, 9, 20, 20, 11};
         int[] last = {-1, 0, 0, 2, 5, 2};
 
-        IDijkstra naive = new NaiveDijkstra();
-        int[][] naiveAns = naive.applyAlgorithm(g, 0);
+        int[][] naiveAns = dijkstra.applyAlgorithm(g, 0);
         for (int i = 0; i < 6; i++) {
             assert (ans[i] == naiveAns[0][i]);
             assert (last[i] == naiveAns[1][i]);
         }
-        System.out.println("Dijkstra works fine");
+        System.out.println(type + "Dijkstra works fine");
     }
 
     static void testBinomialTree() {
