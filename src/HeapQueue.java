@@ -111,27 +111,19 @@ class Heap {
     /**
      * Preserves Heap conditions
      */
-    private void heapify() {
-        // initial position
-        int i = FRONT;
+    private void heapify(int i) {
+        int left = leftChild(i);
+        int right = rightChild(i);
+        int smallest = i;
 
-        // smallest of the two children
-        int smallChild;
+        if (left <= size && Heap[left].getValue() < Heap[smallest].getValue())
+            smallest = left;
+        if (right <= size && Heap[right].getValue() < Heap[smallest].getValue())
+            smallest = right;
 
-        // while current position has any child
-        while (leftChild(i) <= size) {
-            if (rightChild(i) <= size && Heap[rightChild(i)].getValue() < Heap[leftChild(i)].getValue())
-                smallChild = rightChild(i); // right child is smaller
-            else
-                smallChild = leftChild(i); // left child is smaller
-
-            // if current is smaller than both children then break
-            if (Heap[i].getValue() < Heap[smallChild].getValue())
-                break;
-
-            // swap with small child
-            swap(i, smallChild);
-            i = smallChild;
+        if (smallest != i) {
+            swap(i, smallest);
+            heapify(smallest);
         }
     }
 
@@ -143,7 +135,7 @@ class Heap {
     void insert(Node element) {
         Heap[++size] = element;
         position[element.getKey()] = size;
-        for (int i = size; (i > 1) && Heap[i].getValue() > Heap[parent(i)].getValue(); i /= 2) {
+        for (int i = size; (i > 1) && Heap[i].getValue() < Heap[parent(i)].getValue(); i /= 2) {
             swap(i, parent(i));
         }
     }
@@ -156,7 +148,8 @@ class Heap {
     Node extractMin() {
         Node min = Heap[FRONT];
         Heap[FRONT] = Heap[size--];
-        heapify();
+        heapify(FRONT);
+        position[min.getKey()] = 0;
         return min;
     }
 
@@ -167,9 +160,19 @@ class Heap {
      * @param value New value
      */
     void decreaseKey(int key, double value) {
+        // get node
         int pos = position[key];
-        Heap[pos].setValue(value);
-        heapify();
+        Node n = Heap[pos];
+
+        // change value
+        n.setValue(value);
+
+        // destroy
+        swap(pos, size);
+        size--;
+
+        // insert again
+        insert(n);
     }
 }
 

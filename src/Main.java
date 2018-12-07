@@ -187,6 +187,18 @@ class Tests {
         assert (ans == 6);
         ans = Q.extractMin();
         assert (ans == 2);
+        Q.add(1, 2);
+        Q.add(2, 3);
+        Q.add(3, 4);
+        Q.decreaseKey(2, 0);
+        ans = Q.extractMin();
+        assert (ans == 2);
+        Q.decreaseKey(3, 1);
+        Q.decreaseKey(1, 0);
+        ans = Q.extractMin();
+        assert (ans == 1);
+        ans = Q.extractMin();
+        assert (ans == 3);
         System.out.println("Decrease Key works fine");
     }
 
