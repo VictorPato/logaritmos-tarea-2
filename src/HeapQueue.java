@@ -162,6 +162,9 @@ class Heap {
     void decreaseKey(int key, double value) {
         // get node
         int pos = position[key];
+
+        if (pos == 0) return;
+
         Node n = Heap[pos];
 
         // change value
