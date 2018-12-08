@@ -1,24 +1,44 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
         Tests.runTests();
+
+        Graph[][] graphs = Tests.createGraphs();
+
+        long[] naiveStats = Tests.dijkstraTime("Naive", graphs);
+        long[] heapStats = Tests.dijkstraTime("Heap", graphs);
+        long[] fibonacciStats = Tests.dijkstraTime("Fibonacci", graphs);
+
+        System.out.println("\nNaive Stats:");
+        System.out.println("10n Edges: " + naiveStats[0]);
+        System.out.println("100n Edges: " + naiveStats[1]);
+        System.out.println("1000n Edges: " + naiveStats[2]);
+
+        System.out.println("\nHeap Stats:");
+        System.out.println("10n Edges: " + heapStats[0]);
+        System.out.println("100n Edges: " + heapStats[1]);
+        System.out.println("1000n Edges: " + heapStats[2]);
+
+        System.out.println("\nFibonacci Stats:");
+        System.out.println("10n Edges: " + fibonacciStats[0]);
+        System.out.println("100n Edges: " +fibonacciStats[1]);
+        System.out.println("1000n Edges: " + fibonacciStats[2]);
+
     }
 }
 
 class Tests {
     static void runTests() {
-        Tests.testGraph();
-        Tests.testBinomialTree();
-        Tests.testQueue("Heap");
-        Tests.testDecreaseKey("Heap");
-        Tests.testQueue("Fibonacci");
-        Tests.testDecreaseKey("Fibonacci");
-        Tests.testDijkstraCorrectness("Naive");
-        Tests.testDijkstraCorrectness("Heap");
-        Tests.testDijkstraCorrectness("Fibonacci");
+        testGraph();
+        testBinomialTree();
+        testQueue("Heap");
+        testDecreaseKey("Heap");
+        testQueue("Fibonacci");
+        testDecreaseKey("Fibonacci");
+        testDijkstraCorrectness("Naive");
+        testDijkstraCorrectness("Heap");
+        testDijkstraCorrectness("Fibonacci");
     }
 
     static void testGraph() {
@@ -231,6 +251,86 @@ class Tests {
         }
 
         return g;
+    }
+
+    static Graph[][] createGraphs() {
+        long startTime = System.nanoTime();
+        Graph g10_1 = createGraph(10, 123456789);
+        Graph g10_2 = createGraph(10, 987654321);
+        Graph g10_3 = createGraph(10, 321654987);
+        Graph g10_4 = createGraph(10, 123789456);
+        Graph g10_5 = createGraph(10, 789456123);
+        long finishTime = System.nanoTime();
+        long elapsedTime = (finishTime - startTime) / 1000000;
+        System.out.println("Graphs with 10n edges creation time: " + elapsedTime + "ms");
+        Graph[] graphs10 = {g10_1, g10_2, g10_3, g10_4, g10_5};
+
+        startTime = System.nanoTime();
+        Graph g100_1 = createGraph(100, 123456789);
+        Graph g100_2 = createGraph(100, 987654321);
+        Graph g100_3 = createGraph(100, 321654987);
+        Graph g100_4 = createGraph(100, 123789456);
+        Graph g100_5 = createGraph(100, 789456123);
+        finishTime = System.nanoTime();
+        elapsedTime = (finishTime - startTime) / 1000000;
+        System.out.println("Graphs with 100n edges creation time: " + elapsedTime + "ms");
+        Graph[] graphs100 = {g100_1, g100_2, g100_3, g100_4, g100_5};
+
+        startTime = System.nanoTime();
+        Graph g1000_1 = createGraph(1000, 123456789);
+        finishTime = System.nanoTime();
+        elapsedTime = (finishTime - startTime) / 1000000;
+        System.out.println("Graphs with 1000n edges creation time: " + elapsedTime + "ms");
+        Graph[] graphs1000 = {g1000_1};
+
+        return new Graph[][]{graphs10, graphs100, graphs1000};
+    }
+
+    static long[] dijkstraTime(String type, Graph[][] graphs) {
+        Graph[] graphs10, graphs100, graphs1000;
+        graphs10 = graphs[0];
+        graphs100 = graphs[1];
+        graphs1000 = graphs[2];
+
+        IDijkstra dijkstra;
+        switch (type) {
+            case "Naive":
+                dijkstra = new NaiveDijkstra();
+                break;
+            case "Heap":
+                dijkstra = new PriorityQueueDijkstra(new HeapQueue(100000));
+                break;
+            case "Fibonacci":
+                dijkstra = new PriorityQueueDijkstra(new FibonacciHeap());
+                break;
+            default:
+                System.out.println("Please provide a valid type");
+                return new long[3];
+        }
+
+
+        long meanG10 = dijkstraApply(dijkstra, graphs10);
+        long meanG100 = dijkstraApply(dijkstra, graphs100);
+        long meanG1000 = dijkstraApply(dijkstra, graphs1000);
+
+        return new long[]{meanG10, meanG100, meanG1000};
+    }
+
+    static long dijkstraApply(IDijkstra dijkstra, Graph[] graphs) {
+        long startTime, finishTime, elapsedTime;
+        long[] times = new long[graphs.length];
+        for (int i = 0; i < graphs.length; i++) {
+            startTime = System.nanoTime();
+            dijkstra.applyAlgorithm(graphs[i], 0);
+            finishTime = System.nanoTime();
+            elapsedTime = (finishTime - startTime) / 1000000;
+            times[i] = elapsedTime;
+        }
+        long sum = 0;
+        for (long time : times) {
+            sum += time;
+        }
+        return sum / times.length;
     }
 }
 
